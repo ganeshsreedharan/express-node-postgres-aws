@@ -1,32 +1,18 @@
+const express = require('express');
+const bodyParser = require('body-parser')
+const morgan = require('morgan')
+const app =express()
+const employee = require('./employee')
 
-const errorHandler = require("./error-handler")
-const Employee = require('../repository/employee-repo')
-const employee = require("../models/employee")
 
-module.exports = (router ) =>{
+app.use(bodyParser.urlencoded({extended :false}))
 
-    router.get("/details",(req, res, next) =>{
-        Employee.getAll(users=>res.send(users))
-    })
-    
-    router.get("/details/:id", (req, res, next) =>{
-       Employee.getById(req.params.id,(employee)=>req.send(employee))
-    })
-    
-    router.post("/details", (req, res, next) =>{
-        Employee.create(req.body,(response)=>{
-            res.send(response);
-        })
-    })
-    
-    router.put("/details/", (req, res, next) =>{})
-    
-    router.delete("/details/:id", (req, res, next) =>{})
-    
-    router.delete("/details/", (req, res, next) =>{})
-    
-    router.use(errorHandler)
+app.use(bodyParser.json())
 
-    return router
-}
+app.use(morgan('combined'))
+  
 
+app.use("/employee",employee)
+
+
+module.exports= app
